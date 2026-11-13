@@ -2,7 +2,7 @@ import Image from "next/image";
 import Header from "./components/Header";
 
 const stats = [
-  { value: "200+", label: "Happy Customers" },
+  { value: "100+", label: "Happy Customers" },
   { value: "50+", label: "Curated Pieces" },
   { value: "100%", label: "Authentic Style" },
 ];
@@ -100,7 +100,7 @@ export default function Home() {
               sizes="(min-width: 1024px) 52vw, 100vw"
               className="object-cover object-top"
             />
-            {/* Thin inset frame */}
+           
             <div className="pointer-events-none absolute inset-4 border border-white/40 sm:inset-6" />
 
             {/* Floating tag */}

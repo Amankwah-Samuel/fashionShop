@@ -6,7 +6,7 @@ import { useState } from "react";
 const navLinks = [
   { label: "New Arrivals", href: "#new-arrivals" },
   { label: "Shop", href: "#shop" },
-  { label: "Lookbook", href: "#lookbook" },
+  { label: "Cart", href: "#lookbook" },
   { label: "Our Story", href: "#our-story" },
 ];
 
@@ -53,7 +53,7 @@ export default function Header() {
     <header className="sticky top-0 z-40 border-b border-line bg-cream/90 backdrop-blur">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8">
         <Link href="/" className="font-serif text-2xl tracking-wide text-ink">
-          Style Avenue
+          Girl's Hood 
         </Link>
 
         <nav className="hidden md:block" aria-label="Main">
