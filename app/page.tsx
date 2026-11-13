@@ -1,69 +1,120 @@
 import Image from "next/image";
+import Header from "./components/Header";
+
+const stats = [
+  { value: "200+", label: "Happy Customers" },
+  { value: "50+", label: "Curated Pieces" },
+  { value: "100%", label: "Authentic Style" },
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
+    <>
+      <Header />
+      <main className="flex-1">
+        <section className="mx-auto grid max-w-7xl grid-cols-1 lg:min-h-[calc(100svh-5rem)] lg:grid-cols-[1fr_1.05fr]">
+          {/* Copy */}
+          <div className="relative flex flex-col justify-center px-5 py-14 sm:px-8 lg:py-20 lg:pr-12">
+            <div className="animate-fade-up">
+              <p className="text-xs font-medium uppercase tracking-[0.3em] text-gold">
+                New Collection 2026
+              </p>
+              <span className="mt-4 block h-px w-12 bg-gold/60" />
+
+              <h1 className="mt-8 font-serif text-5xl leading-[1.08] text-ink sm:text-6xl xl:text-7xl">
+                Where Soft
+                <br />
+                <em className="text-rose">Meets</em>
+                <br />
+                Sophisticated
+              </h1>
+
+              <p className="mt-7 max-w-md text-lg leading-relaxed text-muted">
+                Curated Korean-style fashion for the modern woman. Minimal,
+                elegant, and effortlessly chic.
+              </p>
+
+              <div className="mt-10 flex flex-wrap items-center gap-6">
+                <a
+                  href="#shop"
+                  className="group inline-flex items-center gap-3 bg-ink px-8 py-4 text-sm uppercase tracking-wider text-white transition-colors hover:bg-black"
+                >
+                  Explore Collection
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    className="transition-transform group-hover:translate-x-1"
+                    aria-hidden
+                  >
+                    <path d="M5 12h14M13 6l6 6-6 6" />
+                  </svg>
+                </a>
+                <a
+                  href="#our-story"
+                  className="border-b border-muted/50 pb-0.5 text-muted transition-colors hover:border-ink hover:text-ink"
+                >
+                  Our Story
+                </a>
+              </div>
+
+              <dl className="mt-14 flex flex-wrap gap-y-6">
+                {stats.map((s, i) => (
+                  <div
+                    key={s.label}
+                    className={`pr-5 sm:pr-8 ${i > 0 ? "border-l border-line pl-5 sm:pl-8" : ""}`}
+                  >
+                    <dt className="sr-only">{s.label}</dt>
+                    <dd className="font-serif text-2xl text-ink">{s.value}</dd>
+                    <dd className="mt-1 text-sm text-muted">{s.label}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+
+            {/* Scroll indicator */}
             <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              href="#new-arrivals"
+              className="absolute bottom-6 right-0 hidden flex-col items-center gap-3 lg:flex"
+              aria-label="Scroll to new arrivals"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+              <span className="text-[10px] uppercase tracking-[0.35em] text-muted">
+                Scroll
+              </span>
+              <span className="relative h-10 w-px overflow-hidden bg-line">
+                <span className="animate-scroll-line absolute inset-0 bg-ink" />
+              </span>
+            </a>
+          </div>
+
+          {/* Image */}
+          <div className="relative min-h-[520px] overflow-hidden bg-blush sm:min-h-[640px] lg:min-h-0">
             <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+              src="/assets/pinklady.jpeg"
+              alt="Model wearing a white off-shoulder knit top, pink belted pleated skirt and white knee-high boots"
+              fill
+              preload
+              sizes="(min-width: 1024px) 52vw, 100vw"
+              className="object-cover object-top"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+            {/* Thin inset frame */}
+            <div className="pointer-events-none absolute inset-4 border border-white/40 sm:inset-6" />
+
+            {/* Floating tag */}
+            <div className="absolute bottom-8 left-8 bg-cream/95 px-5 py-4 shadow-sm backdrop-blur sm:bottom-10 sm:left-10">
+              <p className="text-[10px] uppercase tracking-[0.3em] text-gold">
+                Featured Look
+              </p>
+              <p className="mt-1 font-serif text-lg text-ink">
+                Blush Pleated Set
+              </p>
+            </div>
+          </div>
+        </section>
       </main>
-    </div>
+    </>
   );
 }
