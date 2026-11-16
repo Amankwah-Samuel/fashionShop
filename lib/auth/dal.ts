@@ -1,10 +1,14 @@
 import "server-only";
+import { io } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { SESSION_COOKIE, verifySessionToken } from "./session";
 
 export async function isAdmin(): Promise<boolean> {
   const token = (await cookies()).get(SESSION_COOKIE)?.value;
+  // verifySessionToken reads the current time to check expiry. io() tells
+  // Cache Components this must run per request, not during prerendering.
+  await io();
   return verifySessionToken(token);
 }
 

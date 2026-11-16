@@ -3,7 +3,11 @@
 import { refresh, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/auth/dal";
-import { supabaseAdmin } from "@/lib/supabase/server";
+import {
+  SUPABASE_NOT_CONFIGURED,
+  isSupabaseConfigured,
+  supabaseAdmin,
+} from "@/lib/supabase/server";
 import { PRODUCTS_TAG } from "@/lib/products/queries";
 import {
   ALLOWED_IMAGE_TYPES,
@@ -40,6 +44,7 @@ export async function createImageUploads(
   files: { type: string; size: number }[],
 ): Promise<{ uploads: UploadTicket[] } | { error: string }> {
   await requireAdmin();
+  if (!isSupabaseConfigured()) return { error: SUPABASE_NOT_CONFIGURED };
 
   if (!Array.isArray(files) || files.length === 0) return { uploads: [] };
   if (files.length > MAX_IMAGES) {
@@ -58,7 +63,9 @@ export async function createImageUploads(
   const uploads: UploadTicket[] = [];
   for (const f of files) {
     const path = `products/${crypto.randomUUID()}.${EXT_BY_TYPE[f.type]}`;
-    const { data, error } = await storage.createSignedUploadUrl(path);
+    // upsert lets the browser retry a half-finished upload to the same path.
+    // Paths are random UUIDs, so this can never overwrite another photo.
+    const { data, error } = await storage.createSignedUploadUrl(path, { upsert: true });
     if (error) return { error: `Could not prepare upload: ${error.message}` };
     uploads.push({ path, token: data.token });
   }
@@ -179,6 +186,7 @@ export async function saveProduct(
   formData: FormData,
 ): Promise<ProductFormState> {
   await requireAdmin();
+  if (!isSupabaseConfigured()) return { error: SUPABASE_NOT_CONFIGURED };
 
   const id = String(formData.get("id") ?? "");
   if (id && !UUID_RE.test(id)) return { error: "Invalid product id." };
@@ -226,6 +234,7 @@ export async function saveProduct(
 
 export async function deleteProduct(id: string): Promise<{ error?: string }> {
   await requireAdmin();
+  if (!isSupabaseConfigured()) return { error: SUPABASE_NOT_CONFIGURED };
   if (!UUID_RE.test(id)) return { error: "Invalid product id." };
 
   const db = supabaseAdmin();
@@ -252,6 +261,7 @@ export async function setPublished(
   published: boolean,
 ): Promise<{ error?: string }> {
   await requireAdmin();
+  if (!isSupabaseConfigured()) return { error: SUPABASE_NOT_CONFIGURED };
   if (!UUID_RE.test(id)) return { error: "Invalid product id." };
 
   const db = supabaseAdmin();

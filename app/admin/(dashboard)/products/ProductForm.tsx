@@ -144,11 +144,23 @@ export default function ProductForm({ product }: { product?: Product }) {
         for (let n = 0; n < pending.length; n++) {
           const { path, token } = res.uploads[n];
           const file = pending[n].file!;
-          const { error } = await storage.uploadToSignedUrl(path, token, file, {
-            contentType: file.type,
-          });
-          if (error) {
-            failed = `Couldn't upload "${file.name}": ${error.message}`;
+          // Retry a few times: a flaky connection often succeeds on a second try.
+          let lastError: string | null = null;
+          for (let attempt = 1; attempt <= 3; attempt++) {
+            const { error } = await storage.uploadToSignedUrl(path, token, file, {
+              contentType: file.type,
+            });
+            if (!error) {
+              lastError = null;
+              break;
+            }
+            lastError = error.message;
+            if (attempt < 3) await new Promise((r) => setTimeout(r, attempt * 1500));
+          }
+          if (lastError) {
+            failed = /failed to fetch|network|load failed/i.test(lastError)
+              ? `Couldn't reach Supabase to upload "${file.name}". Check your internet connection, and if you use an ad blocker or Brave Shields, turn it off for this page. Then press Save again.`
+              : `Couldn't upload "${file.name}": ${lastError}`;
             break;
           }
           uploaded.set(pending[n].key, path);

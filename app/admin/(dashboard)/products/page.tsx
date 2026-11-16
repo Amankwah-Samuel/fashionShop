@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
+import { requireAdmin } from "@/lib/auth/dal";
 import { adminListProducts } from "@/lib/products/queries";
 import { formatPrice, productImageUrl } from "@/lib/products/shared";
 import RowActions from "./RowActions";
@@ -36,6 +37,23 @@ export default function ProductsPage() {
 }
 
 async function ProductList() {
+  await requireAdmin();
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return (
+      <div role="status" className="mt-8 border border-gold/40 bg-white px-6 py-8">
+        <p className="font-serif text-2xl text-ink">Connect Supabase to start adding products</p>
+        <ol className="mt-4 list-decimal space-y-1.5 pl-5 text-muted">
+          <li>Create a free project at supabase.com.</li>
+          <li>In its SQL Editor, run the file <code>supabase/schema.sql</code>.</li>
+          <li>
+            Copy the project URL, anon key and service_role key into <code>.env.local</code>.
+          </li>
+          <li>Restart <code>pnpm dev</code> and refresh this page.</li>
+        </ol>
+      </div>
+    );
+  }
+
   const products = await adminListProducts();
 
   const stats = [
