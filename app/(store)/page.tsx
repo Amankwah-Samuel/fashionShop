@@ -1,4 +1,5 @@
 import Image from "next/image";
+import OurStory from "./_components/OurStory";
 
 const stats = [
   { value: "100+", label: "Happy Customers" },
@@ -112,6 +113,8 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        <OurStory />
       </main>
     </>
   );
