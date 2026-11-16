@@ -16,7 +16,7 @@ export default function ProductsPage() {
     <div className="mx-auto max-w-6xl">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="text-xs font-medium uppercase tracking-[0.3em] text-gold">
+          <p className="text-xs font-medium uppercase tracking-[0.3em] text-accent">
             Catalogue
           </p>
           <h1 className="mt-2 font-serif text-3xl text-ink sm:text-4xl">Products</h1>
@@ -40,7 +40,7 @@ async function ProductList() {
   await requireAdmin();
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
     return (
-      <div role="status" className="mt-8 border border-gold/40 bg-white px-6 py-8">
+      <div role="status" className="mt-8 border border-accent/40 bg-white px-6 py-8">
         <p className="font-serif text-2xl text-ink">Connect Supabase to start adding products</p>
         <ol className="mt-4 list-decimal space-y-1.5 pl-5 text-muted">
           <li>Create a free project at supabase.com.</li>
@@ -132,7 +132,7 @@ async function ProductList() {
                   <Badge tone={p.is_published ? "green" : "neutral"}>
                     {p.is_published ? "Live" : "Draft"}
                   </Badge>
-                  {p.is_new_arrival ? <Badge tone="gold">New arrival</Badge> : null}
+                  {p.is_new_arrival ? <Badge tone="pink">New arrival</Badge> : null}
                   <Badge tone={p.stock === 0 ? "red" : p.stock <= LOW_STOCK ? "amber" : "neutral"}>
                     {p.stock === 0 ? "Sold out" : `${p.stock} in stock`}
                   </Badge>
@@ -150,7 +150,7 @@ async function ProductList() {
 
 const toneClass = {
   green: "bg-emerald-50 text-emerald-800",
-  gold: "bg-gold/15 text-[#7a6535]",
+  pink: "bg-blush text-accent",
   red: "bg-red-50 text-red-800",
   amber: "bg-amber-50 text-amber-800",
   neutral: "bg-cream text-muted",

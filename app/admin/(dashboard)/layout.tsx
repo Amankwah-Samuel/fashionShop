@@ -10,7 +10,7 @@ export default function DashboardLayout({ children }: LayoutProps<"/admin">) {
         <div className="flex items-center justify-between px-5 py-4 md:block md:px-6 md:py-7">
           <Link href="/admin/products" className="block">
             <span className="font-serif text-xl text-ink">Girl&apos;s Hood</span>
-            <span className="mt-0.5 block text-[10px] uppercase tracking-[0.3em] text-gold">
+            <span className="mt-0.5 block text-[10px] uppercase tracking-[0.3em] text-accent">
               Admin
             </span>
           </Link>

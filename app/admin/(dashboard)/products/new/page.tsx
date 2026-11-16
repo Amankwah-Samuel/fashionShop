@@ -13,7 +13,7 @@ export default function NewProductPage() {
       </Link>
       <h1 className="mt-3 font-serif text-3xl text-ink sm:text-4xl">Add product</h1>
       {!isSupabaseConfigured() ? (
-        <p role="status" className="mt-6 border border-gold/40 bg-white px-5 py-4 text-sm text-muted">
+        <p role="status" className="mt-6 border border-accent/40 bg-white px-5 py-4 text-sm text-muted">
           <strong className="font-medium text-ink">Saving is off for now.</strong>{" "}
           {SUPABASE_NOT_CONFIGURED}
         </p>

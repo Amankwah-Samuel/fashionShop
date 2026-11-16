@@ -1,13 +1,15 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-cream: #fcf8f6;
-  --color-ink: #2a2a2a;
-  --color-muted: #5c5856;
-  --color-rose: #d4a5a5;
-  --color-blush: #d9a8ac;
-  --color-gold: #b89b5e;
-  --color-line: #ece4e0;
+  /* Brand palette */
+  --color-cream: #ffffff; /* page background */
+  --color-blush: #f8dde5; /* soft pink surfaces */
+  --color-rose: #e9a9bd; /* brand pink: fills, badges, large accents */
+  --color-ink: #292329; /* text, buttons */
+  /* Derived from the palette for readability */
+  --color-muted: #6c5f67; /* secondary text (ink tinted, passes contrast on white and blush) */
+  --color-accent: #b4587a; /* deeper rose for small pink text, since #E9A9BD is too light to read */
+  --color-line: #f1e2e8; /* borders */
   --font-serif: var(--font-playfair);
   --font-sans: var(--font-jost);
 }

@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Header from "./components/Header";
 
 const stats = [
   { value: "100+", label: "Happy Customers" },
@@ -10,16 +9,15 @@ const stats = [
 export default function Home() {
   return (
     <>
-      <Header />
       <main className="flex-1">
         <section className="mx-auto grid max-w-7xl grid-cols-1 lg:min-h-[calc(100svh-5rem)] lg:grid-cols-[1fr_1.05fr]">
           {/* Copy */}
           <div className="relative flex flex-col justify-center px-5 py-14 sm:px-8 lg:py-20 lg:pr-12">
             <div className="animate-fade-up">
-              <p className="text-xs font-medium uppercase tracking-[0.3em] text-gold">
+              <p className="text-xs font-medium uppercase tracking-[0.3em] text-accent">
                 New Collection 2026
               </p>
-              <span className="mt-4 block h-px w-12 bg-gold/60" />
+              <span className="mt-4 block h-px w-12 bg-accent/60" />
 
               <h1 className="mt-8 font-serif text-5xl leading-[1.08] text-ink sm:text-6xl xl:text-7xl">
                 Where Soft
@@ -36,7 +34,7 @@ export default function Home() {
 
               <div className="mt-10 flex flex-wrap items-center gap-6">
                 <a
-                  href="#shop"
+                  href="/shop"
                   className="group inline-flex items-center gap-3 bg-ink px-8 py-4 text-sm uppercase tracking-wider text-white transition-colors hover:bg-black"
                 >
                   Explore Collection
@@ -77,7 +75,7 @@ export default function Home() {
 
             {/* Scroll indicator */}
             <a
-              href="#new-arrivals"
+              href="/new-arrivals"
               className="absolute bottom-6 right-0 hidden flex-col items-center gap-3 lg:flex"
               aria-label="Scroll to new arrivals"
             >
@@ -105,7 +103,7 @@ export default function Home() {
 
             {/* Floating tag */}
             <div className="absolute bottom-8 left-8 bg-cream/95 px-5 py-4 shadow-sm backdrop-blur sm:bottom-10 sm:left-10">
-              <p className="text-[10px] uppercase tracking-[0.3em] text-gold">
+              <p className="text-[10px] uppercase tracking-[0.3em] text-accent">
                 Featured Look
               </p>
               <p className="mt-1 font-serif text-lg text-ink">

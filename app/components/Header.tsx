@@ -4,10 +4,10 @@ import Link from "next/link";
 import { useState } from "react";
 
 const navLinks = [
-  { label: "New Arrivals", href: "#new-arrivals" },
-  { label: "Shop", href: "#shop" },
-  { label: "Cart", href: "#lookbook" },
-  { label: "Our Story", href: "#our-story" },
+  { label: "New Arrivals", href: "/new-arrivals" },
+  { label: "Shop", href: "/shop" },
+  { label: "Cart", href: "/cart" },
+  { label: "Our Story", href: "/#our-story" },
 ];
 
 function IconButton({
@@ -27,7 +27,7 @@ function IconButton({
     >
       {children}
       {badge ? (
-        <span className="absolute right-0.5 top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-gold text-[10px] font-medium text-white">
+        <span className="absolute right-0.5 top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-[10px] font-medium text-white">
           {badge}
         </span>
       ) : null}
@@ -53,16 +53,16 @@ export default function Header() {
     <header className="sticky top-0 z-40 border-b border-line bg-cream/90 backdrop-blur">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8">
         <Link href="/" className="font-serif text-2xl tracking-wide text-ink">
-          Girl's Hood 
+          Girl&apos;s Hood
         </Link>
 
         <nav className="hidden md:block" aria-label="Main">
           <ul className="flex items-center gap-8 text-[15px] text-muted">
             {navLinks.map((l) => (
               <li key={l.label}>
-                <a href={l.href} className="transition-colors hover:text-ink">
+                <Link href={l.href} className="transition-colors hover:text-ink">
                   {l.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
@@ -109,13 +109,13 @@ export default function Header() {
           <ul className="flex flex-col px-5 py-4 text-muted">
             {navLinks.map((l) => (
               <li key={l.label}>
-                <a
+                <Link
                   href={l.href}
                   onClick={() => setOpen(false)}
                   className="block py-3 transition-colors hover:text-ink"
                 >
                   {l.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
