@@ -14,11 +14,20 @@ export default function DashboardLayout({ children }: LayoutProps<"/admin">) {
               Admin
             </span>
           </Link>
-          <form action={logout} className="md:hidden">
-            <button type="submit" className="text-sm text-muted hover:text-ink">
-              Sign out
-            </button>
-          </form>
+          {/* Phones: the sidebar footer is hidden, so its links live up here. */}
+          <div className="flex items-center gap-1 md:hidden">
+            <Link
+              href="/"
+              className="rounded-lg border border-line px-3 py-2 text-sm text-ink transition-colors hover:border-ink"
+            >
+              View shop ↗
+            </Link>
+            <form action={logout}>
+              <button type="submit" className="px-3 py-2 text-sm text-muted hover:text-ink">
+                Sign out
+              </button>
+            </form>
+          </div>
         </div>
 
         <Suspense fallback={<AdminNavStatic />}>
