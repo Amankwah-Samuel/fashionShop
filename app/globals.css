@@ -10,6 +10,7 @@
   --color-muted: #6c5f67; /* secondary text (ink tinted, passes contrast on white and blush) */
   --color-accent: #b4587a; /* deeper rose for small pink text, since #E9A9BD is too light to read */
   --color-line: #f1e2e8; /* borders */
+  --color-whatsapp: #1e8e4e; /* WhatsApp green, darkened so small icons/text stay readable */
   --font-serif: var(--font-playfair);
   --font-sans: var(--font-jost);
 }

@@ -89,3 +89,22 @@ export async function adminGetProduct(id: string): Promise<Product | null> {
   }
   return data as Product | null;
 }
+
+// ---------------------------------------------------------------------------
+// Cart (refreshes prices/stock for items saved in the shopper's browser)
+// ---------------------------------------------------------------------------
+
+export async function getPublishedProductsByIds(ids: string[]): Promise<Product[]> {
+  "use cache";
+  cacheTag(PRODUCTS_TAG);
+  cacheLife("hours");
+
+  if (ids.length === 0) return [];
+  const { data, error } = await supabaseAdmin()
+    .from("products")
+    .select("*")
+    .in("id", ids)
+    .eq("is_published", true);
+  if (error) throw new Error(`Failed to load cart products: ${error.message}`);
+  return data as Product[];
+}

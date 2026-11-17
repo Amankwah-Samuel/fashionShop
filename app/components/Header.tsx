@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useCartCount } from "@/lib/cart/store";
 
 const navLinks = [
   { label: "New Arrivals", href: "/new-arrivals" },
@@ -48,6 +49,7 @@ const iconProps = {
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const cartCount = useCartCount();
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-cream/90 backdrop-blur">
@@ -80,12 +82,21 @@ export default function Header() {
               <path d="M19.5 12.6 12 20l-7.5-7.4A4.9 4.9 0 0 1 12 6.3a4.9 4.9 0 0 1 7.5 6.3Z" />
             </svg>
           </IconButton>
-          <IconButton label="Cart, 1 item" badge={1}>
+          <Link
+            href="/cart"
+            aria-label={cartCount ? `Cart, ${cartCount} ${cartCount === 1 ? "item" : "items"}` : "Cart"}
+            className="relative flex h-10 w-10 items-center justify-center text-ink transition-colors hover:text-rose"
+          >
             <svg {...iconProps}>
               <path d="M5 7h14l-1.2 12.1a1 1 0 0 1-1 .9H7.2a1 1 0 0 1-1-.9L5 7Z" />
               <path d="M9 10V6a3 3 0 0 1 6 0v4" />
             </svg>
-          </IconButton>
+            {cartCount ? (
+              <span className="absolute right-0 top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-1 text-[10px] font-medium text-white">
+                {cartCount > 99 ? "99+" : cartCount}
+              </span>
+            ) : null}
+          </Link>
           <button
             type="button"
             aria-label={open ? "Close menu" : "Open menu"}

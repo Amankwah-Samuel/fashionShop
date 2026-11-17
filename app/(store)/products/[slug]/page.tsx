@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { getProductBySlug } from "@/lib/products/queries";
 import { formatPrice, productImageUrl } from "@/lib/products/shared";
+import BuyBox from "../../_components/BuyBox";
 
 type Params = PageProps<"/products/[slug]">["params"];
 
@@ -96,34 +97,18 @@ async function ProductDetail({ params }: { params: Params }) {
             {soldOut ? "Sold out" : product.stock <= 3 ? `Only ${product.stock} left` : "In stock"}
           </p>
 
-          {product.sizes.length > 0 ? (
-            <div className="mt-8">
-              <p className="text-sm text-muted">Sizes</p>
-              <ul className="mt-2 flex flex-wrap gap-2">
-                {product.sizes.map((s) => (
-                  <li key={s} className="min-w-12 border border-line px-4 py-2 text-center text-sm text-ink">
-                    {s}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
-
-          {product.colors.length > 0 ? (
-            <div className="mt-6">
-              <p className="text-sm text-muted">Colours</p>
-              <p className="mt-1 text-ink">{product.colors.join(" · ")}</p>
-            </div>
-          ) : null}
-
-          {/* Add-to-bag (size picker + button) is built with the cart. */}
-          <button
-            type="button"
-            disabled
-            className="mt-10 w-full bg-ink px-8 py-4 text-sm uppercase tracking-wider text-white opacity-60"
-          >
-            {soldOut ? "Sold out" : "Add to bag — coming soon"}
-          </button>
+          <BuyBox
+            product={{
+              id: product.id,
+              slug: product.slug,
+              name: product.name,
+              price: Number(product.price),
+              stock: product.stock,
+              sizes: product.sizes,
+              colors: product.colors,
+              image: product.images[0] ?? null,
+            }}
+          />
 
           {product.description ? (
             <div className="mt-10 border-t border-line pt-6">
