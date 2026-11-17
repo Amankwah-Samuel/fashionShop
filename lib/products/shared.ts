@@ -25,7 +25,7 @@ export const ALLOWED_IMAGE_TYPES = [
 ] as const;
 
 /** Change this to your shop's currency code (e.g. "NGN", "GBP", "KRW"). */
-export const CURRENCY = "USD";
+export const CURRENCY = "GHS";
 
 export type Product = {
   id: string;
@@ -51,7 +51,7 @@ export function productImageUrl(path: string): string {
   return `${base}/storage/v1/object/public/${PRODUCT_IMAGES_BUCKET}/${path}`;
 }
 
-const priceFormatter = new Intl.NumberFormat("en-US", {
+const priceFormatter = new Intl.NumberFormat("en-GH", {
   style: "currency",
   currency: CURRENCY,
 });
