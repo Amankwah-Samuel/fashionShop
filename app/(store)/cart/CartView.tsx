@@ -11,11 +11,12 @@ import {
   useCart,
   type CartLine,
 } from "@/lib/cart/store";
+import { saveFavourite } from "@/lib/favourites/store";
 import { formatPrice, productImageUrl } from "@/lib/products/shared";
 import { openWhatsAppOrder } from "@/lib/whatsapp";
-import { AlertIcon, BagIcon, ChatIcon, TrashIcon } from "../_components/icons";
+import { AlertIcon, BagIcon, ChatIcon, HeartIcon, TrashIcon } from "../_components/icons";
 import QuantityStepper from "../_components/QuantityStepper";
-import { getLiveCartProducts } from "./actions";
+import { getLiveProducts } from "./actions";
 
 const LOW_STOCK = 3;
 
@@ -153,14 +154,25 @@ function CartItem({ line }: { line: CartLine }) {
             </h3>
             {options ? <p className="mt-0.5 text-sm text-muted">{options}</p> : null}
           </div>
-          <button
-            type="button"
-            onClick={() => removeLine(line.key)}
-            aria-label={`Remove ${line.name} from cart`}
-            className="-mr-1 -mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-muted transition-colors hover:bg-blush/60 hover:text-ink"
-          >
-            <TrashIcon size={17} />
-          </button>
+          <div className="-mr-1 -mt-1 flex shrink-0 items-center">
+            <button
+              type="button"
+              onClick={() => saveForLater(line)}
+              aria-label={`Save ${line.name} for later`}
+              className="flex h-9 items-center gap-1.5 rounded-lg px-2 text-sm text-muted transition-colors hover:bg-blush/60 hover:text-ink"
+            >
+              <HeartIcon size={17} />
+              <span className="hidden sm:inline">Save</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => removeLine(line.key)}
+              aria-label={`Remove ${line.name} from cart`}
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-muted transition-colors hover:bg-blush/60 hover:text-ink"
+            >
+              <TrashIcon size={17} />
+            </button>
+          </div>
         </div>
 
         {line.unavailable ? (
@@ -192,6 +204,23 @@ function CartItem({ line }: { line: CartLine }) {
       </div>
     </article>
   );
+}
+
+/** Moves a cart line to favourites. */
+function saveForLater(line: CartLine) {
+  saveFavourite({
+    productId: line.productId,
+    slug: line.slug,
+    name: line.name,
+    image: line.image,
+    price: line.price,
+    compareAtPrice: null,
+    stock: line.stock,
+    // Refreshed from the catalog when the favourites page opens.
+    sizes: line.size ? [line.size] : [],
+    colors: line.color ? [line.color] : [],
+  });
+  removeLine(line.key);
 }
 
 function Notice({ children }: { children: React.ReactNode }) {
@@ -246,7 +275,7 @@ function useRefreshFromServer(lines: CartLine[]) {
   useEffect(() => {
     if (done.current || lines.length === 0) return;
     done.current = true;
-    getLiveCartProducts(lines.map((l) => l.productId))
+    getLiveProducts(lines.map((l) => l.productId))
       .then(syncCart)
       .catch(() => {
         // Offline or Supabase hiccup: keep showing saved data.

@@ -40,6 +40,17 @@ export function ChatIcon(p: IconProps) {
   );
 }
 
+export function HeartIcon({ filled, ...p }: IconProps & { filled?: boolean }) {
+  return (
+    <Svg {...p}>
+      <path
+        d="M19.5 12.6 12 20l-7.5-7.4A4.9 4.9 0 0 1 12 6.3a4.9 4.9 0 0 1 7.5 6.3Z"
+        fill={filled ? "currentColor" : "none"}
+      />
+    </Svg>
+  );
+}
+
 export function MinusIcon(p: IconProps) {
   return (
     <Svg {...p}>

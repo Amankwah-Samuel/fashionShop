@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { addToCart } from "@/lib/cart/store";
 import { openWhatsAppOrder } from "@/lib/whatsapp";
+import FavouriteButton from "./FavouriteButton";
 import { ArrowIcon, BagIcon, ChatIcon, CheckIcon } from "./icons";
 import QuantityStepper from "./QuantityStepper";
 
@@ -12,6 +13,7 @@ export type BuyBoxProduct = {
   slug: string;
   name: string;
   price: number;
+  compareAtPrice: number | null;
   stock: number;
   sizes: string[];
   colors: string[];
@@ -119,6 +121,7 @@ export default function BuyBox({ product }: { product: BuyBoxProduct }) {
           <ChatIcon className="text-whatsapp" />
           Order on WhatsApp
         </button>
+        <FavouriteButton product={product} variant="full" />
       </div>
 
       <div aria-live="polite">

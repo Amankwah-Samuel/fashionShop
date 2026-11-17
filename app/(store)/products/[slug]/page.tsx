@@ -103,6 +103,7 @@ async function ProductDetail({ params }: { params: Params }) {
               slug: product.slug,
               name: product.name,
               price: Number(product.price),
+              compareAtPrice: product.compare_at_price === null ? null : Number(product.compare_at_price),
               stock: product.stock,
               sizes: product.sizes,
               colors: product.colors,

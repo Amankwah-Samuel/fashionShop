@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useCartCount } from "@/lib/cart/store";
+import { useFavourites } from "@/lib/favourites/store";
 
 const navLinks = [
   { label: "New Arrivals", href: "/new-arrivals" },
   { label: "Shop", href: "/shop" },
+  { label: "Favourites", href: "/favourites" },
   { label: "Cart", href: "/cart" },
   { label: "Our Story", href: "/#our-story" },
 ];
@@ -50,6 +52,7 @@ const iconProps = {
 export default function Header() {
   const [open, setOpen] = useState(false);
   const cartCount = useCartCount();
+  const favCount = useFavourites().length;
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-cream/90 backdrop-blur">
@@ -77,11 +80,20 @@ export default function Header() {
               <path d="m20 20-3.5-3.5" />
             </svg>
           </IconButton>
-          <IconButton label="Wishlist">
+          <Link
+            href="/favourites"
+            aria-label={favCount ? `Favourites, ${favCount} saved` : "Favourites"}
+            className="relative flex h-10 w-10 items-center justify-center text-ink transition-colors hover:text-rose"
+          >
             <svg {...iconProps}>
               <path d="M19.5 12.6 12 20l-7.5-7.4A4.9 4.9 0 0 1 12 6.3a4.9 4.9 0 0 1 7.5 6.3Z" />
             </svg>
-          </IconButton>
+            {favCount ? (
+              <span className="absolute right-0 top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-rose px-1 text-[10px] font-medium text-ink">
+                {favCount > 99 ? "99+" : favCount}
+              </span>
+            ) : null}
+          </Link>
           <Link
             href="/cart"
             aria-label={cartCount ? `Cart, ${cartCount} ${cartCount === 1 ? "item" : "items"}` : "Cart"}

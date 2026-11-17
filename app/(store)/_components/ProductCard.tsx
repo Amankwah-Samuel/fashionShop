@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { formatPrice, productImageUrl, type Product } from "@/lib/products/shared";
 import CardActions from "./CardActions";
+import FavouriteButton from "./FavouriteButton";
 
 export default function ProductCard({
   product,
@@ -16,9 +17,23 @@ export default function ProductCard({
   const onSale = product.compare_at_price !== null && product.compare_at_price > product.price;
   const soldOut = product.stock === 0;
   const sizes = "(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw";
+  const buyable = {
+    id: product.id,
+    slug: product.slug,
+    name: product.name,
+    price: Number(product.price),
+    compareAtPrice: product.compare_at_price === null ? null : Number(product.compare_at_price),
+    stock: product.stock,
+    sizes: product.sizes,
+    colors: product.colors,
+    image: cover ?? null,
+  };
 
   return (
-    <div>
+    <div className="relative">
+      <div className="absolute right-2.5 top-2.5 z-10">
+        <FavouriteButton product={buyable} />
+      </div>
       <Link href={`/products/${product.slug}`} className="group block">
         <div className="relative aspect-[3/4] overflow-hidden bg-blush">
           {cover ? (
@@ -77,18 +92,7 @@ export default function ProductCard({
           </p>
         </div>
       </Link>
-      <CardActions
-        product={{
-          id: product.id,
-          slug: product.slug,
-          name: product.name,
-          price: Number(product.price),
-          stock: product.stock,
-          sizes: product.sizes,
-          colors: product.colors,
-          image: cover ?? null,
-        }}
-      />
+      <CardActions product={buyable} />
     </div>
   );
 }

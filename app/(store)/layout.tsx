@@ -19,6 +19,7 @@ export default function StoreLayout({ children }: LayoutProps<"/">) {
             <ul className="flex flex-wrap gap-x-8 gap-y-2 text-sm text-muted">
               <li><Link href="/new-arrivals" className="hover:text-ink">New Arrivals</Link></li>
               <li><Link href="/shop" className="hover:text-ink">Shop</Link></li>
+              <li><Link href="/favourites" className="hover:text-ink">Favourites</Link></li>
               <li><Link href="/cart" className="hover:text-ink">Cart</Link></li>
             </ul>
           </nav>
