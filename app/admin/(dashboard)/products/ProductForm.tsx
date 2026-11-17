@@ -6,6 +6,7 @@ import {
   useEffect,
   useRef,
   useState,
+  useSyncExternalStore,
   useTransition,
   type FormEvent,
 } from "react";
@@ -33,6 +34,8 @@ type ImageItem = {
   path?: string;
   file?: File;
 };
+
+const noopSubscribe = () => () => {};
 
 const inputClass =
   "mt-2 w-full border border-line bg-white px-4 py-3 text-ink outline-none transition-colors focus:border-ink aria-[invalid=true]:border-red-600";
@@ -68,6 +71,13 @@ export default function ProductForm({ product }: { product?: Product }) {
     [],
   );
 
+  // Until JavaScript has loaded, a submit would be a plain browser form post
+  // that reloads the page and wipes the form, so keep the button disabled.
+  const hydrated = useSyncExternalStore(
+    noopSubscribe,
+    () => true,
+    () => false,
+  );
   const busy = uploading || saving;
   const errors = state.fieldErrors ?? {};
 
@@ -442,10 +452,12 @@ export default function ProductForm({ product }: { product?: Product }) {
         </Link>
         <button
           type="submit"
-          disabled={busy}
+          disabled={busy || !hydrated}
           className="bg-ink px-7 py-3 text-sm uppercase tracking-wider text-white transition-colors hover:bg-black disabled:opacity-60"
         >
-          {uploading && !saving
+          {!hydrated
+            ? "Loading…"
+            : uploading && !saving
             ? "Uploading photos…"
             : saving
               ? "Saving…"
