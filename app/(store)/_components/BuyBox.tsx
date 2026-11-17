@@ -27,15 +27,9 @@ export default function BuyBox({ product }: { product: BuyBoxProduct }) {
   const [error, setError] = useState<string | null>(null);
   const [added, setAdded] = useState(false);
 
+  // Size/colour are optional: some pieces come in one fixed size, bags have none.
+  // Anything not chosen is sorted out with the shopper on WhatsApp.
   function validate(): boolean {
-    if (product.sizes.length > 0 && !size) {
-      setError("Please choose a size.");
-      return false;
-    }
-    if (product.colors.length > 0 && !color) {
-      setError("Please choose a colour.");
-      return false;
-    }
     setError(null);
     return true;
   }
@@ -154,14 +148,28 @@ function OptionGroup({
   label: string;
   options: string[];
   value: string | null;
-  onChange: (v: string) => void;
+  onChange: (v: string | null) => void;
   disabled?: boolean;
 }) {
+  // A single fixed option is just information, not a choice.
+  if (options.length === 1) {
+    return (
+      <div>
+        <p className="text-sm text-muted">{label}</p>
+        <p className="mt-1 text-ink">{options[0]}</p>
+      </div>
+    );
+  }
+
   return (
     <fieldset disabled={disabled}>
       <legend className="text-sm text-muted">
         {label}
-        {value ? <span className="ml-2 text-ink">{value}</span> : null}
+        {value ? (
+          <span className="ml-2 text-ink">{value}</span>
+        ) : (
+          <span className="ml-2 text-xs">(optional)</span>
+        )}
       </legend>
       <div className="mt-2 flex flex-wrap gap-2">
         {options.map((o) => {
@@ -171,7 +179,7 @@ function OptionGroup({
               key={o}
               type="button"
               aria-pressed={active}
-              onClick={() => onChange(o)}
+              onClick={() => onChange(active ? null : o)}
               className={`min-w-12 rounded-lg border px-4 py-2 text-center text-sm transition-colors disabled:opacity-50 ${
                 active ? "border-ink bg-ink text-white" : "border-line text-ink hover:border-rose"
               }`}
