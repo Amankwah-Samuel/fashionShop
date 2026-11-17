@@ -5,10 +5,11 @@ import { useState } from "react";
 import { useCartCount } from "@/lib/cart/store";
 import { useFavourites } from "@/lib/favourites/store";
 
-// Desktop shows these as text; Favourites and Cart are the icons on the right.
+// Desktop text links; Favourites is the heart icon on the right.
 const navLinks = [
   { label: "New Arrivals", href: "/new-arrivals" },
   { label: "Shop", href: "/shop" },
+  { label: "Cart", href: "/cart" },
   { label: "Our Story", href: "/#our-story" },
 ];
 

@@ -10,11 +10,11 @@ import {
   useTransition,
   type FormEvent,
 } from "react";
+import { prepareImage } from "@/lib/images/prepare";
 import { supabaseBrowser } from "@/lib/supabase/browser";
 import {
   ALLOWED_IMAGE_TYPES,
   CATEGORIES,
-  MAX_IMAGE_BYTES,
   MAX_IMAGES,
   PRODUCT_IMAGES_BUCKET,
   SIZES,
@@ -37,6 +37,11 @@ type ImageItem = {
 
 const noopSubscribe = () => () => {};
 
+// Local keys for picked photos. (crypto.randomUUID only exists on HTTPS or
+// localhost, so it breaks when testing from a phone over http://<PC IP>.)
+let keySeq = 0;
+const nextKey = () => `new-${Date.now()}-${keySeq++}`;
+
 const inputClass =
   "mt-2 w-full border border-line bg-white px-4 py-3 text-ink outline-none transition-colors focus:border-ink aria-[invalid=true]:border-red-600";
 
@@ -55,6 +60,7 @@ export default function ProductForm({ product }: { product?: Product }) {
     })),
   );
   const [dragging, setDragging] = useState(false);
+  const [preparing, setPreparing] = useState(false);
   const fileInput = useRef<HTMLInputElement>(null);
 
   // Free blob: preview URLs when the form goes away.
@@ -78,27 +84,34 @@ export default function ProductForm({ product }: { product?: Product }) {
     () => true,
     () => false,
   );
-  const busy = uploading || saving;
+  const busy = uploading || saving || preparing;
   const errors = state.fieldErrors ?? {};
 
-  function addFiles(list: FileList | null) {
-    if (!list) return;
+  async function addFiles(list: FileList | null) {
+    if (!list || list.length === 0) return;
+    // Copy before clearing the input, which empties the live FileList.
+    const files = Array.from(list);
+    if (fileInput.current) fileInput.current.value = "";
     setUploadError(null);
+    setPreparing(true);
+
     const picked: ImageItem[] = [];
-    for (const file of Array.from(list)) {
-      if (!(ALLOWED_IMAGE_TYPES as readonly string[]).includes(file.type)) {
-        setUploadError(`"${file.name}" isn't a JPG, PNG, WebP or AVIF image.`);
-        continue;
+    try {
+      for (const original of files) {
+        // Resizes big phone photos so they fit the 5 MB limit and upload fast.
+        const result = await prepareImage(original);
+        if ("error" in result) {
+          setUploadError(result.error);
+          continue;
+        }
+        picked.push({
+          key: nextKey(),
+          file: result.file,
+          previewUrl: URL.createObjectURL(result.file),
+        });
       }
-      if (file.size > MAX_IMAGE_BYTES) {
-        setUploadError(`"${file.name}" is larger than 5 MB.`);
-        continue;
-      }
-      picked.push({
-        key: crypto.randomUUID(),
-        file,
-        previewUrl: URL.createObjectURL(file),
-      });
+    } finally {
+      setPreparing(false);
     }
     setImages((prev) => {
       const room = MAX_IMAGES - prev.length;
@@ -108,7 +121,6 @@ export default function ProductForm({ product }: { product?: Product }) {
       }
       return [...prev, ...picked.slice(0, Math.max(room, 0))];
     });
-    if (fileInput.current) fileInput.current.value = "";
   }
 
   function removeImage(key: string) {
@@ -404,8 +416,12 @@ export default function ProductForm({ product }: { product?: Product }) {
                   dragging ? "border-ink bg-cream" : "border-line hover:border-muted"
                 }`}
               >
-                <span className="text-sm text-ink">Click or drop photos here</span>
-                <span className="mt-1 text-xs text-muted">JPG, PNG, WebP or AVIF · up to 5 MB each</span>
+                <span className="text-sm text-ink">
+                  {preparing ? "Preparing photos…" : "Tap to add photos, or drop them here"}
+                </span>
+                <span className="mt-1 text-xs text-muted">
+                  JPG, PNG, WebP or AVIF · large photos are resized automatically
+                </span>
                 <input
                   ref={fileInput}
                   type="file"
