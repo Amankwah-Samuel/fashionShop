@@ -14,7 +14,7 @@ const jost = Jost({
 });
 
 export const metadata: Metadata = {
-  title: "Style Avenue — Where Soft Meets Sophisticated",
+  title: "Girl's Hood — Where Soft Meets Sophisticated",
   description:
     "Curated Korean-style fashion for the modern woman. Minimal, elegant, and effortlessly chic.",
 };

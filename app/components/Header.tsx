@@ -5,38 +5,21 @@ import { useState } from "react";
 import { useCartCount } from "@/lib/cart/store";
 import { useFavourites } from "@/lib/favourites/store";
 
+// Desktop shows these as text; Favourites and Cart are the icons on the right.
 const navLinks = [
+  { label: "New Arrivals", href: "/new-arrivals" },
+  { label: "Shop", href: "/shop" },
+  { label: "Our Story", href: "/#our-story" },
+];
+
+// The mobile menu spells everything out.
+const mobileLinks = [
   { label: "New Arrivals", href: "/new-arrivals" },
   { label: "Shop", href: "/shop" },
   { label: "Favourites", href: "/favourites" },
   { label: "Cart", href: "/cart" },
   { label: "Our Story", href: "/#our-story" },
 ];
-
-function IconButton({
-  label,
-  children,
-  badge,
-}: {
-  label: string;
-  children: React.ReactNode;
-  badge?: number;
-}) {
-  return (
-    <button
-      type="button"
-      aria-label={label}
-      className="relative flex h-10 w-10 items-center justify-center text-ink transition-colors hover:text-rose"
-    >
-      {children}
-      {badge ? (
-        <span className="absolute right-0.5 top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-accent text-[10px] font-medium text-white">
-          {badge}
-        </span>
-      ) : null}
-    </button>
-  );
-}
 
 const iconProps = {
   width: 20,
@@ -74,12 +57,6 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-1 sm:gap-3">
-          <IconButton label="Search">
-            <svg {...iconProps}>
-              <circle cx="11" cy="11" r="7" />
-              <path d="m20 20-3.5-3.5" />
-            </svg>
-          </IconButton>
           <Link
             href="/favourites"
             aria-label={favCount ? `Favourites, ${favCount} saved` : "Favourites"}
@@ -130,7 +107,7 @@ export default function Header() {
       {open && (
         <nav className="border-t border-line md:hidden" aria-label="Mobile">
           <ul className="flex flex-col px-5 py-4 text-muted">
-            {navLinks.map((l) => (
+            {mobileLinks.map((l) => (
               <li key={l.label}>
                 <Link
                   href={l.href}
