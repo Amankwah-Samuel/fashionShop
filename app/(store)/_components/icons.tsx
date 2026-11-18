@@ -51,6 +51,15 @@ export function HeartIcon({ filled, ...p }: IconProps & { filled?: boolean }) {
   );
 }
 
+/** Simple ghost outline, used for the Snapchat link. */
+export function GhostIcon(p: IconProps) {
+  return (
+    <Svg {...p}>
+      <path d="M12 3.5c-3 0-5 2.2-5 5.2v2.1l-1.6.6c-.4.2-.4.7 0 .9l1.4.6c-.5 1.4-1.5 2.6-3 3.2-.4.2-.3.7.1.8l1.6.4.4 1.2c.1.3.4.4.7.3l1.3-.3c.9 0 1.6.9 4.1.9s3.2-.9 4.1-.9l1.3.3c.3.1.6 0 .7-.3l.4-1.2 1.6-.4c.4-.1.5-.6.1-.8-1.5-.6-2.5-1.8-3-3.2l1.4-.6c.4-.2.4-.7 0-.9l-1.6-.6V8.7c0-3-2-5.2-5-5.2Z" />
+    </Svg>
+  );
+}
+
 export function MinusIcon(p: IconProps) {
   return (
     <Svg {...p}>

@@ -3,7 +3,7 @@
 import { formatPrice } from "@/lib/products/shared";
 
 /** Shop's WhatsApp number in international format, digits only (e.g. 2348012345678). */
-const WHATSAPP_NUMBER = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "").replace(/\D/g, "");
+export const WHATSAPP_NUMBER = (process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "").replace(/\D/g, "");
 
 export type OrderItem = {
   name: string;
