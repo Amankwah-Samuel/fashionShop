@@ -12,7 +12,7 @@ export default function StoreLayout({ children }: LayoutProps<"/">) {
           <div>
             <p className="font-serif text-2xl text-ink">Girl&apos;s Hood</p>
             <p className="mt-2 max-w-xs text-sm text-muted">
-              Curated Korean-style fashion for the modern woman.
+             Trendy and elegant fashion pieces for the modern Ghanaian woman.
             </p>
           </div>
           <nav aria-label="Footer">
