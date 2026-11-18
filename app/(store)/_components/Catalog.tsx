@@ -1,6 +1,8 @@
+import Form from "next/form";
 import Link from "next/link";
 import { Suspense } from "react";
 import { getNewArrivals, getPublishedProducts } from "@/lib/products/queries";
+import { MAX_QUERY_LENGTH, parseQuery, searchProducts } from "@/lib/products/search";
 import { CATEGORIES, type Product } from "@/lib/products/shared";
 import ProductCard from "./ProductCard";
 
@@ -74,15 +76,23 @@ async function CatalogResults({
     ? (params.sort as Sort)
     : "newest";
 
-  const products = sortProducts(
+  const query = parseQuery(params.q);
+
+  const sorted = sortProducts(
     category ? all.filter((p) => p.category === category) : all,
     sort,
   );
+  // With the default sort, best matches come first; a price sort keeps price order.
+  const matches = query ? searchProducts(sorted, query) : sorted;
+  const products =
+    query && sort !== "newest" ? sorted.filter((p) => matches.includes(p)) : matches;
 
-  const href = (next: { category?: string; sort?: Sort }) => {
+  const href = (next: { category?: string; sort?: Sort; q?: string }) => {
     const q = new URLSearchParams();
     const c = "category" in next ? next.category : category;
     const s = next.sort ?? sort;
+    const term = "q" in next ? next.q : query;
+    if (term) q.set("q", term);
     if (c) q.set("category", c);
     if (s !== "newest") q.set("sort", s);
     const qs = q.toString();
@@ -107,8 +117,37 @@ async function CatalogResults({
 
   return (
     <>
-      {/* Toolbar: categories + sort */}
-      <div className="sticky top-20 z-30 -mx-5 flex flex-col gap-4 border-b border-line bg-white/95 px-5 py-4 backdrop-blur sm:-mx-8 sm:px-8 lg:flex-row lg:items-center lg:justify-between">
+      {/* Toolbar: search + categories + sort */}
+      <div className="sticky top-20 z-30 -mx-5 flex flex-col gap-4 border-b border-line bg-white/95 px-5 py-4 backdrop-blur sm:-mx-8 sm:px-8 lg:flex-row lg:flex-wrap lg:items-center lg:justify-between">
+        <Form action={basePath} scroll={false} role="search" className="relative w-full">
+          {/* Keep the current category/sort when searching */}
+          {category ? <input type="hidden" name="category" value={category} /> : null}
+          {sort !== "newest" ? <input type="hidden" name="sort" value={sort} /> : null}
+          <label htmlFor="catalog-search" className="sr-only">Search products</label>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-muted">
+            <circle cx="11" cy="11" r="7" />
+            <path d="m20 20-3.5-3.5" />
+          </svg>
+          <input
+            key={query}
+            id="catalog-search"
+            type="search"
+            name="q"
+            defaultValue={query}
+            maxLength={MAX_QUERY_LENGTH}
+            placeholder="Search dresses, bags, colours…"
+            enterKeyHint="search"
+            autoComplete="off"
+            className="w-full rounded-lg border border-line bg-white py-2.5 pl-10 pr-24 text-[15px] text-ink outline-none transition-colors placeholder:text-muted/70 focus:border-ink"
+          />
+          <button
+            type="submit"
+            className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-md bg-ink px-4 py-1.5 text-xs uppercase tracking-wider text-white transition-colors hover:bg-black"
+          >
+            Search
+          </button>
+        </Form>
+
         <nav aria-label="Categories" className="-mx-1 overflow-x-auto">
           <ul className="flex gap-2 px-1">
             <li>
@@ -129,6 +168,14 @@ async function CatalogResults({
         <div className="flex items-center justify-between gap-6 text-sm lg:justify-end">
           <p className="text-muted" aria-live="polite">
             {products.length} {products.length === 1 ? "piece" : "pieces"}
+            {query ? (
+              <>
+                {" "}for <span className="text-ink">&ldquo;{query}&rdquo;</span>
+                <Link href={href({ q: undefined })} scroll={false} className="ml-2 text-ink underline underline-offset-4">
+                  Clear
+                </Link>
+              </>
+            ) : null}
           </p>
           <nav aria-label="Sort" className="flex items-center gap-1">
             <span className="mr-1 hidden text-muted sm:inline">Sort:</span>
@@ -149,6 +196,29 @@ async function CatalogResults({
           </nav>
         </div>
       </div>
+
+      {products.length === 0 ? (
+        <div className="py-20 text-center">
+          <p className="font-serif text-2xl text-ink">
+            {query ? <>No pieces match &ldquo;{query}&rdquo;</> : "Nothing here yet"}
+          </p>
+          <p className="mt-3 text-muted">
+            {query && category
+              ? "Try searching all categories, or use fewer words."
+              : "Try a different word, like a colour or a type of piece."}
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            {query && category ? (
+              <Link href={href({ category: undefined })} scroll={false} className="rounded-lg bg-ink px-6 py-3 text-sm text-white hover:bg-black">
+                Search all categories
+              </Link>
+            ) : null}
+            <Link href={href({ q: undefined, category: undefined })} scroll={false} className="rounded-lg border border-line px-6 py-3 text-sm text-ink hover:border-ink">
+              See everything
+            </Link>
+          </div>
+        </div>
+      ) : null}
 
       <ul className="mt-10 grid grid-cols-2 gap-x-4 gap-y-12 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4">
         {products.map((p, i) => (

@@ -1,5 +1,6 @@
 "use client";
 
+import Form from "next/form";
 import Link from "next/link";
 import { useState } from "react";
 import { useCartCount } from "@/lib/cart/store";
@@ -35,6 +36,7 @@ const iconProps = {
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const cartCount = useCartCount();
   const favCount = useFavourites().length;
 
@@ -58,6 +60,28 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center gap-1 sm:gap-3">
+          <button
+            type="button"
+            aria-label={searchOpen ? "Close search" : "Search"}
+            aria-expanded={searchOpen}
+            aria-controls="site-search"
+            onClick={() => {
+              setSearchOpen((o) => !o);
+              setOpen(false);
+            }}
+            className="flex h-10 w-10 items-center justify-center text-ink transition-colors hover:text-rose"
+          >
+            <svg {...iconProps}>
+              {searchOpen ? (
+                <path d="M6 6l12 12M18 6 6 18" />
+              ) : (
+                <>
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="m20 20-3.5-3.5" />
+                </>
+              )}
+            </svg>
+          </button>
           <Link
             href="/favourites"
             aria-label={favCount ? `Favourites, ${favCount} saved` : "Favourites"}
@@ -91,7 +115,10 @@ export default function Header() {
             type="button"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
-            onClick={() => setOpen((o) => !o)}
+            onClick={() => {
+              setOpen((o) => !o);
+              setSearchOpen(false);
+            }}
             className="flex h-10 w-10 items-center justify-center md:hidden"
           >
             <svg {...iconProps}>
@@ -104,6 +131,42 @@ export default function Header() {
           </button>
         </div>
       </div>
+
+      {searchOpen && (
+        <div id="site-search" className="border-t border-line">
+          <Form
+            action="/shop"
+            role="search"
+            onSubmit={() => setSearchOpen(false)}
+            className="relative mx-auto max-w-3xl px-5 py-4 sm:px-8"
+          >
+            <label htmlFor="header-search" className="sr-only">
+              Search products
+            </label>
+            <input
+              id="header-search"
+              type="search"
+              name="q"
+              autoFocus
+              required
+              maxLength={80}
+              placeholder="Search dresses, bags, colours…"
+              enterKeyHint="search"
+              autoComplete="off"
+              onKeyDown={(e) => {
+                if (e.key === "Escape") setSearchOpen(false);
+              }}
+              className="w-full rounded-lg border border-line bg-white py-3 pl-4 pr-28 text-base text-ink outline-none transition-colors placeholder:text-muted/70 focus:border-ink"
+            />
+            <button
+              type="submit"
+              className="absolute right-7 top-1/2 -translate-y-1/2 rounded-md bg-ink px-4 py-2 text-xs uppercase tracking-wider text-white transition-colors hover:bg-black sm:right-10"
+            >
+              Search
+            </button>
+          </Form>
+        </div>
+      )}
 
       {open && (
         <nav className="border-t border-line md:hidden" aria-label="Mobile">

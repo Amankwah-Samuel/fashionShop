@@ -21,16 +21,17 @@ export default function Home() {
               <span className="mt-4 block h-px w-12 bg-accent/60" />
 
               <h1 className="mt-8 font-serif text-5xl leading-[1.08] text-ink sm:text-6xl xl:text-7xl">
-                Where Soft
+                Style that
                 <br />
-                <em className="text-rose">Meets</em>
+                <em className="text-rose">speaks</em>
                 <br />
-                Sophisticated
+                Elegance
               </h1>
 
               <p className="mt-7 max-w-md text-lg leading-relaxed text-muted">
-                Curated Korean-style fashion for the modern woman. Minimal,
-                elegant, and effortlessly chic.
+                Discover thoughtfully curated fashion for the modern Ghanaian
+                woman. From everyday essentials to statement pieces, find styles
+                that make you feel confident, beautiful, and effortlessly chic.
               </p>
 
               <div className="mt-10 flex flex-wrap items-center gap-6">
@@ -99,7 +100,7 @@ export default function Home() {
               sizes="(min-width: 1024px) 52vw, 100vw"
               className="object-cover object-top"
             />
-           
+
             <div className="pointer-events-none absolute inset-4 border border-white/40 sm:inset-6" />
 
             {/* Floating tag */}
