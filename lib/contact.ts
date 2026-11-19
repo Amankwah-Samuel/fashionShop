@@ -3,7 +3,7 @@
 import { WHATSAPP_NUMBER } from "./whatsapp";
 
 /** Snapchat username (without @). */
-export const SNAPCHAT_USERNAME = "s_diggins10";
+export const SNAPCHAT_USERNAME = "enaya455";
 
 export const snapchatUrl = `https://www.snapchat.com/add/${SNAPCHAT_USERNAME}`;
 
