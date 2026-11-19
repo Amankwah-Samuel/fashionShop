@@ -3,7 +3,7 @@ import OurStory from "./_components/OurStory";
 
 const stats = [
   { value: "100+", label: "Happy Customers" },
-  { value: "50+", label: "Curated Pieces" },
+  { value: "20+", label: "Curated Pieces" },
   { value: "100%", label: "Authentic Style" },
 ];
 
